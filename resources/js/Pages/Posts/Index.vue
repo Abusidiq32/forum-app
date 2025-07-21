@@ -1,4 +1,5 @@
 <template>
+    <Head title="Posts" />
 
     <AppLayout>
         <Container> 
@@ -18,4 +19,5 @@
     
     import Container from '@/Components/Container.vue';
     import AppLayout from '@/Layouts/AppLayout.vue';
+    import { Head } from '@inertiajs/vue3';
 </script>
