@@ -18,6 +18,7 @@ class PostResource extends JsonResource
         return [
             'id' => $this->id,
             'user' => $this->whenLoaded('user', fn () =>  UserResource::make($this->user)),
+            // 'user' => UserResource::make($this->user),
             'title' => $this->title,
             'body' => $this->body,
             'updated_at' => $this->updated_at,
