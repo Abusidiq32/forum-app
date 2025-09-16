@@ -16,12 +16,15 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $users = User::factory(10)->create();
-        $posts = Post::factory(200)->recycle($users)->create();
-        $comments = Comment::factory(100)->recycle($users)->recycle($posts)->create();
+        $posts = Post::factory(200)
+            ->has(Comment::factory(15)->recycle($users))
+            ->recycle($users)
+            ->create();
+
 
         User::factory()
-        ->has(Post::factory(45))
-        ->has(Comment::factory(120)->recycle($posts))
+        ->has(Post::factory(20)->has(Comment::factory(15)->recycle($users)))
+        ->has(Comment::factory(15)->recycle($posts))
         ->create([
             'name' => 'Admin User',
             'email' => 'admin@gmail.com',
