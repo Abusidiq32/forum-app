@@ -15,7 +15,7 @@
                     <ul class="divide-y mt-4">
                         <li v-for="comment in comments.data" :key="comment.id" class=" px-2 py-4">
                             <span class="text-sm"> {{ comment.body }} </span>
-                            <span class="first-letter:uppercase block pt-1 text-sm text-gray-600">by {{ comment.user.name }}</span>
+                            <span class="first-letter:uppercase block pt-1 text-sm text-gray-600">by {{ comment.user.name }} {{ relativeDate(comment.created_at) }}</span>
                         </li>
                     </ul>
 
