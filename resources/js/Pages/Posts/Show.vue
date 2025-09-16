@@ -31,9 +31,9 @@ import AppLayout from '@/Layouts/AppLayout.vue';
 import Container from '@/Components/Container.vue';
 import Pagination from '@/Components/Pagination.vue';
 import { computed } from 'vue';
-import { formatDistance, parseISO } from 'date-fns'
+import { relativeDate } from '@/Utilities/date';
 
 
 const props = defineProps(['post', 'comments']);
-const formattedDate = computed(() => formatDistance(parseISO(props.post.created_at), new Date()))
+const formattedDate = computed(() => relativeDate(props.post.created_at));
 </script>
