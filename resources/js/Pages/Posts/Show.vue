@@ -14,7 +14,7 @@
                 <h2 class="text-xl font-semibold">Comments</h2>
                 <form @submit.prevent="addComment">
                     <div>
-                        <TextInput name="body" id="body" v-model="commentForm.body" placeholder="Add a comment..."/>
+                        <TextInput name="body" id="body" v-model="commentForm.body" required placeholder="Add a comment..."/>
                     </div>
                     <PrimaryButton type="submit" class="mt-2">Add Comment</PrimaryButton>
                 </form>
