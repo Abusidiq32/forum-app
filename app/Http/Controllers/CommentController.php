@@ -33,7 +33,7 @@ class CommentController extends Controller
             'body' => 'required|string|max:1000',
         ]))
             ->user()->associate($request->user())
-            ->post()->asssociate($post)
+            ->post()->associate($post)
             ->save();
 
         return to_route('posts.show', $post);

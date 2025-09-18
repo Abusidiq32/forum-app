@@ -12,13 +12,20 @@
 
             <div class="mt-10">
                 <h2 class="text-xl font-semibold">Comments</h2>
-                    <ul class="divide-y mt-4">
-                        <li v-for="comment in comments.data" :key="comment.id" class=" px-2 py-4">
-                            <Comment :comment="comment" />
-                        </li>
-                    </ul>
+                <form @submit.prevent="addComment">
+                    <div>
+                        <TextInput name="body" id="body" v-model="commentForm.body" placeholder="Add a comment..."/>
+                    </div>
+                    <PrimaryButton type="submit" class="mt-2">Add Comment</PrimaryButton>
+                </form>
 
-                    <Pagination :meta="comments.meta" class="mt-4" />
+                <ul class="divide-y mt-4">
+                    <li v-for="comment in comments.data" :key="comment.id" class=" px-2 py-4">
+                        <Comment :comment="comment" />
+                    </li>
+                </ul>
+
+                <Pagination :meta="comments.meta" class="mt-4" />
             </div>
         </Container>
     </AppLayout>
@@ -32,8 +39,17 @@ import Pagination from '@/Components/Pagination.vue';
 import Comment from '@/Components/Comment.vue';
 import { computed } from 'vue';
 import { relativeDate } from '@/Utilities/date';
+import { useForm } from '@inertiajs/vue3';
+import TextInput from '@/Components/TextInput.vue';
+import PrimaryButton from '@/Components/PrimaryButton.vue';
 
 
 const props = defineProps(['post', 'comments']);
 const formattedDate = computed(() => relativeDate(props.post.created_at));
+
+const commentForm = useForm({
+    body: '',
+});
+const addComment = () => commentForm.post(route('posts.comment.store', props.post.id));
+
 </script>
