@@ -8,7 +8,7 @@
             <p class="mt-1 break-all">{{ comment.body }}</p>
             <span class="first-letter:uppercase block pt-1 text-xs text-gray-600">by {{ comment.user.name }} {{ relativeDate(comment.created_at) }} ago</span>
             <div class="mt-1">
-                <form v-if="comment.can?.delete" @submit.prevent="deleteComment">
+                <form v-if="comment.can?.delete" @submit.prevent="$emit('delete', comment.id)">
                     <button>Delete</button>
                 </form>
             </div>
@@ -22,9 +22,8 @@
     import { router, usePage } from "@inertiajs/vue3";
     import { computed } from 'vue';
     
-    const deleteComment = () => router.delete(route('comments.destroy', props.comment.id), {
-        preserveScroll: true,
-    });
+    const emit = defineEmits(['deleted']);
+
 
     // Used to display the delete button only if the comment belongs to the authenticated user
     // 'v-if="cantDelete"'
