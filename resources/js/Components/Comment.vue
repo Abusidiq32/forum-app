@@ -7,11 +7,24 @@
         <div>
             <p class="mt-1 break-all">{{ comment.body }}</p>
             <span class="first-letter:uppercase block pt-1 text-xs text-gray-600">by {{ comment.user.name }} {{ relativeDate(comment.created_at) }} ago</span>
+            <div class="mt-1">
+                <form v-if="cantDelete" @submit.prevent="deleteComment">
+                    <button>Delete</button>
+                </form>
+            </div>
         </div>
     </div>
 </template>
 
 <script setup>
-    defineProps(['comment']);
+    const props = defineProps(['comment']);
     import { relativeDate } from '@/Utilities/date';
+    import { router, usePage } from "@inertiajs/vue3";
+    import { computed } from 'vue';
+    
+    const deleteComment = () => router.delete(route('comments.destroy', props.comment.id), {
+        preserveScroll: true,
+    });
+
+    const cantDelete = computed(() => props.comment.user.id === usePage().props.auth.user?.id);
 </script>
