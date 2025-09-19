@@ -8,7 +8,7 @@
             <p class="mt-1 break-all">{{ comment.body }}</p>
             <span class="first-letter:uppercase block pt-1 text-xs text-gray-600">by {{ comment.user.name }} {{ relativeDate(comment.created_at) }} ago</span>
             <div class="mt-1">
-                <form v-if="cantDelete" @submit.prevent="deleteComment">
+                <form v-if="comment.can?.delete" @submit.prevent="deleteComment">
                     <button>Delete</button>
                 </form>
             </div>
@@ -26,5 +26,7 @@
         preserveScroll: true,
     });
 
-    const cantDelete = computed(() => props.comment.user.id === usePage().props.auth.user?.id);
+    // Used to display the delete button only if the comment belongs to the authenticated user
+    // 'v-if="cantDelete"'
+    // const cantDelete = computed(() => props.comment.user.id === usePage().props.auth.user?.id);
 </script>
