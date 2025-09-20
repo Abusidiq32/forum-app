@@ -24,7 +24,7 @@ class CommentController extends Controller
      */
     public function create()
     {
-        //
+        return true;
     }
 
     /**
@@ -62,9 +62,13 @@ class CommentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Comment $comment)
     {
-        //
+        $this->authorize('update', $comment);
+        $comment->update($request->validate([
+            'body' => 'required|string|max:1000',
+        ]));
+        return to_route('posts.show', ['post' => $comment->post_id, 'page' => $request->query('page')] );
     }
 
     /**

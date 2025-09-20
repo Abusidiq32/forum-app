@@ -37,7 +37,10 @@ class CommentPolicy
      */
     public function update(User $user, Comment $comment): bool
     {
-        return false;
+        if($user->id !== $comment->user_id){
+            return false;
+        }
+        return $comment->created_at->isAfter(now()->subHour());
     }
 
     /**
