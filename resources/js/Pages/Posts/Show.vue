@@ -12,7 +12,7 @@
 
             <div class="mt-10">
                 <h2 class="text-xl font-semibold">Comments</h2>
-                <form v-if="$page.props.auth.user" @submit.prevent="addComment" class="mt-4">
+                <form v-if="$page.props.auth.user" @submit.prevent=" () => commentIdBeingEdited ? updateComment() : addComment()" class="mt-4">
                     <div>
                         <TextArea name="body" id="body" v-model="commentForm.body" rows="4" placeholder="Add your comment..."/>
                         <InputError :message="commentForm.errors.body" class="mt-2" v-if="commentForm.errors.body" />
@@ -72,6 +72,14 @@ const addComment = () => commentForm.post(route('posts.comment.store', props.pos
     preserveScroll: true,
     onSuccess: () => commentForm.reset('body'),
 });
+
+const updateComment = () => commentForm.put(route('comments.update', {
+    comment: commentIdBeingEdited.value,
+    page: props.comments.meta.current_page,
+}), {
+    preserveScroll: true,
+    onSuccess: () => (commentIdBeingEdited.value = null, commentForm.reset('body'))
+})
 
 const deleteComment = (commentId) => router.delete(route('comments.destroy', {comment: commentId, page: props.comments.meta.current_page}), {
     preserveScroll: true,
