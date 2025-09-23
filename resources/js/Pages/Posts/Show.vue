@@ -17,7 +17,8 @@
                         <TextArea name="body" id="body" v-model="commentForm.body" rows="4" placeholder="Add your comment..."/>
                         <InputError :message="commentForm.errors.body" class="mt-2" v-if="commentForm.errors.body" />
                     </div>
-                    <PrimaryButton type="submit" class="mt-2" :disabled="commentForm.processing">Add Comment</PrimaryButton>
+                    <PrimaryButton type="submit" class="mt-2" :disabled="commentForm.processing" v-text="commentIdBeingEdited ? 'Update Comment' : 'Add Comment'"></PrimaryButton>
+                    <SecondaryButton v-if="commentIdBeingEdited" @click="cancelEditComment" class="ml-2">Cancel</SecondaryButton>
                 </form>
 
                 <ul class="divide-y mt-4">
@@ -44,6 +45,7 @@ import { router, useForm } from '@inertiajs/vue3';
 import TextArea from '@/Components/TextArea.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import InputError from '@/Components/InputError.vue';
+import SecondaryButton from '@/Components/SecondaryButton.vue';
 
 
 const props = defineProps(['post', 'comments']);
@@ -59,6 +61,11 @@ const editComment = (commentId) => {
     commentIdBeingEdited.value = commentId;
     commentForm.body = commentBeingEdit.value?.body;
 
+}
+
+const cancelEditComment = () => {
+    commentIdBeingEdited.value = null;
+    commentForm.reset('body');
 }
 
 const addComment = () => commentForm.post(route('posts.comment.store', props.post.id), {
