@@ -14,7 +14,7 @@
                 <h2 class="text-xl font-semibold">Comments</h2>
                 <form v-if="$page.props.auth.user" @submit.prevent=" () => commentIdBeingEdited ? updateComment() : addComment()" class="mt-4">
                     <div>
-                        <TextArea name="body" id="body" v-model="commentForm.body" rows="4" placeholder="Add your comment..."/>
+                        <TextArea ref="commentTextAreaRef" name="body" id="body" v-model="commentForm.body" rows="4" placeholder="Add your comment..."/>
                         <InputError :message="commentForm.errors.body" class="mt-2" v-if="commentForm.errors.body" />
                     </div>
                     <PrimaryButton type="submit" class="mt-2" :disabled="commentForm.processing" v-text="commentIdBeingEdited ? 'Update Comment' : 'Add Comment'"></PrimaryButton>
@@ -55,11 +55,13 @@ const commentForm = useForm({
     body: '',
 });
 
+const commentTextAreaRef = ref(null);
 const commentIdBeingEdited = ref(null);
 const commentBeingEdit = computed(() => props.comments.data.find(comment => comment.id === commentIdBeingEdited.value));
 const editComment = (commentId) => {
     commentIdBeingEdited.value = commentId;
     commentForm.body = commentBeingEdit.value?.body;
+    commentTextAreaRef.value?.focus();
 
 }
 
