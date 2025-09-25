@@ -20,15 +20,32 @@
                     <PrimaryButton type="submit" class="mt-2" :disabled="commentForm.processing" v-text="commentIdBeingEdited ? 'Update Comment' : 'Add Comment'"></PrimaryButton>
                     <SecondaryButton v-if="commentIdBeingEdited" @click="cancelEditComment" class="ml-2">Cancel</SecondaryButton>
                 </form>
-
+<!-- 
                 <ul class="divide-y mt-4">
                     <li v-for="comment in comments.data" :key="comment.id" class=" px-2 py-4">
                         <Comment @edit="editComment" @delete="deleteComment" :comment="comment" />
+                    </li>
+                </ul> -->
+
+                <ul class="divide-y mt-4">
+                    <li v-for="comment in comments.data" :key="comment.id" class="px-2 py-4">
+                    <Comment @edit="editComment" @delete="openDeleteModal(comment.id)" :comment="comment" />
                     </li>
                 </ul>
 
                 <Pagination :meta="comments.meta" class="mt-4" />
             </div>
+
+            <!-- Confirmation modal -->
+            <ConfirmationModalWrapper
+                v-model="showDeleteModal"
+                title="Delete Comment"
+                message="Are you sure you want to delete this comment? This action cannot be undone."
+                confirmText="Delete"
+                cancelText="Cancel"
+                :processing="deleting"
+                @confirm="confirmDelete"
+            />
         </Container>
     </AppLayout>
 
@@ -46,6 +63,7 @@ import TextArea from '@/Components/TextArea.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import InputError from '@/Components/InputError.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
+import ConfirmationModalWrapper from '@/Components/ConfirmationModalWrapper.vue';
 
 
 const props = defineProps(['post', 'comments']);
@@ -79,12 +97,29 @@ const updateComment = () => commentForm.put(route('comments.update', {
     comment: commentIdBeingEdited.value,
     page: props.comments.meta.current_page,
 }), {
-    preserveScroll: true,
-    onSuccess: () => (commentIdBeingEdited.value = null, commentForm.reset('body'))
-})
+    preserveScroll: true, onSuccess: () => (commentIdBeingEdited.value = null, commentForm.reset('body')) })
 
-const deleteComment = (commentId) => router.delete(route('comments.destroy', {comment: commentId, page: props.comments.meta.current_page}), {
+// delete with modal
+const showDeleteModal = ref(false)
+const deleting = ref(false)
+const commentIdPendingDelete = ref(null)
+
+const openDeleteModal = (id) => {
+  commentIdPendingDelete.value = id
+  showDeleteModal.value = true
+}
+
+const confirmDelete = () => {
+  if (!commentIdPendingDelete.value) return
+  deleting.value = true
+  router.delete(route('comments.destroy', { comment: commentIdPendingDelete.value, page: props.comments.meta.current_page }), {
     preserveScroll: true,
-});
+    onFinish: () => {
+      deleting.value = false
+      showDeleteModal.value = false
+      commentIdPendingDelete.value = null
+    }
+  })
+}
 
 </script>
