@@ -252,6 +252,5 @@ const menu = [
                 <slot />
             </main>
         </div>
-        <ConfirmationModalWrapper/>
     </div>
 </template>
