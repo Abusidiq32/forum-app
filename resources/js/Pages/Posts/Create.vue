@@ -1,5 +1,5 @@
 <template>
-    <AppLayout title="Create a Post">
+    <AppLayout title="Create Post">
         <Container>
             <h1 class="text-2xl font-bold">Create a Post</h1>
     
