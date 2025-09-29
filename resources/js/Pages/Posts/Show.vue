@@ -57,6 +57,7 @@
 </template>
 
 <script setup>
+    // Imports
     import { computed, ref } from 'vue';
     import { router, useForm } from '@inertiajs/vue3';
 
@@ -72,11 +73,14 @@
 
     import { relativeDate } from '@/Utilities/date';
 
+    // Props
     const props = defineProps(['post', 'comments']);
 
+    // Computed Values
     const formattedDate = computed(() => relativeDate(props.post.created_at));
     const commentBeingEdit = computed(() => props.comments.data.find(comment => comment.id === commentIdBeingEdited.value));
 
+    // Refs annd States
     const commentForm = useForm({ body: '',});
 
     const commentTextAreaRef = ref(null);
@@ -91,7 +95,7 @@
     const deleting = ref(false)
     const commentIdPendingDelete = ref(null)
 
-
+    // Methods - Editing
     const editComment = (commentId) => {
         commentIdBeingEdited.value = commentId
         commentForm.body = commentBeingEdit.value?.body ?? ''
@@ -99,11 +103,13 @@
         commentTextAreaRef.value?.focus()
     }
 
+    // Methods - Cancel Edit
     const cancelEditComment = () => {
         commentIdBeingEdited.value = null;
         commentForm.reset('body');
     }
 
+    // Methods - Adding, Updating
     const addComment = () => commentForm.post(route('posts.comment.store', props.post.id), {
         preserveScroll: true,
         onSuccess: () => commentForm.reset('body'),
@@ -134,7 +140,7 @@
         )
     }
 
-    
+    // Methods - Deleting
     const openDeleteModal = (id) => {
         commentIdPendingDelete.value = id
         showDeleteModal.value = true
