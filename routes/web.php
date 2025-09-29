@@ -23,6 +23,7 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return Inertia::render('Dashboard');
     })->name('dashboard');
+    Route::resource('posts', PostController::class)->only(['create', 'store']);
     Route::post('posts/{post}/comments', [CommentController::class, 'store'])->name('posts.comment.store');
     Route::put('comments/{comment}', [CommentController::class, 'update'])->name('comments.update');
     Route::delete('comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');

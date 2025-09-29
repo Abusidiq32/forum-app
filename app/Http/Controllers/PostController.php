@@ -25,7 +25,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia('Posts/Create');
     }
 
     /**
@@ -33,7 +33,14 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data= $request->validate([
+            'title' => ['required', 'string', 'min:10', 'max:255'],
+            'body' => ['required', 'string', 'min:10', 'max:10000'],
+        ]);
+
+        $post = Post::make($data);
+        $post->user()->associate($request->user())->save();
+        return to_route('posts.show', ['post' => $post->id]);
     }
 
     /**
