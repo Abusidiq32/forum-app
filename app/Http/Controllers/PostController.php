@@ -6,6 +6,7 @@ use App\Http\Resources\CommentResource;
 use App\Http\Resources\PostResource;
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 
 class PostController extends Controller
@@ -50,8 +51,14 @@ class PostController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Post $post)
+    public function show(Request $request, Post $post)
     {
+        // dd($post->showRoute(), $request->path());
+        if(! Str::contains($post->showRoute(), $request->path()))
+        {
+            return redirect($post->showRoute($request->query()), status: 301);
+        }
+
         $post->load('user');
         return Inertia('Posts/Show', [
             'post' => PostResource::make($post),
