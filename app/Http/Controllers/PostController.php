@@ -45,7 +45,8 @@ class PostController extends Controller
 
         $post = Post::make($data);
         $post->user()->associate($request->user())->save();
-        return to_route('posts.show', ['post' => $post->id]);
+        return redirect($post->showRoute())
+            ->banner('Post created successfully!');
     }
 
     /**
