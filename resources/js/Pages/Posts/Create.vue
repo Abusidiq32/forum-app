@@ -18,12 +18,13 @@
     
                 <div>
                     <div class="mt-1">
+                        <MarkdownEditor v-model="form.body"/>
                         <textarea
                             name="body"
                             id="body"
                             v-model="form.body"
                             rows="25"
-                            class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm mt-2"
                             placeholder="Write the content of your post here..."
                         ></textarea>
                     </div>
@@ -47,6 +48,7 @@
     import PrimaryButton from "@/Components/PrimaryButton.vue";
     import TextInput from "@/Components/TextInput.vue";
     import { useForm } from "@inertiajs/vue3";
+import MarkdownEditor from "@/Components/MarkdownEditor.vue";
 
 
     const form = useForm ({
