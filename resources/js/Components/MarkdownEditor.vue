@@ -47,6 +47,15 @@
                 </button>
             </li>
             <li>
+                <button @click="() => editor.chain().focus().toggleUnderline().run()" 
+                    type="button" 
+                    class="px-3 py-2" 
+                    :class="[ editor?.isActive('underline') ? 'bg-gray-200': 'hover:bg-gray-200',]"
+                    title="Unerline">
+                        <i class="ri-underline"></i>
+                </button>
+            </li>
+            <li>
                 <button @click="() => editor.chain().focus().toggleStrike().run()" 
                     type="button" 
                     class="px-3 py-2" 
@@ -62,6 +71,15 @@
                     :class="[ editor?.isActive('blockquote') ? 'bg-gray-200': 'hover:bg-gray-200',]"
                     title="Blockquote">
                         <i class="ri-double-quotes-l"></i>
+                </button>
+            </li>
+            <li>
+                <button @click="promptUserForHref"
+                    type="button" 
+                    class="px-3 py-2" 
+                    :class="[ editor?.isActive('link') ? 'bg-gray-200': 'hover:bg-gray-200',]"
+                    title="Links">
+                        <i class="ri-link"></i>
                 </button>
             </li>
             <li>
@@ -93,6 +111,7 @@
     import { Markdown } from 'tiptap-markdown';
     import { watch } from 'vue';
     import 'remixicon/fonts/remixicon.css'
+    import Link from '@tiptap/extension-link';
 
 
     const props = defineProps({
@@ -107,7 +126,10 @@
                 heading: {
                     levels: [2, 3, 4],
                 },
+                code: false,
+                codeBlock: false,
             }),
+            Link,
             Markdown,
         ],
         editorProps: {
@@ -123,6 +145,20 @@
             editor.value?.commands.setContent(value || '');
         }
     }, { immediate: true });
+
+    const promptUserForHref = () => {
+
+        if (editor.value?.isActive('link')){
+            return editor.value?.chain().focus().unsetLink().run();
+        }
+
+        const href = prompt('Where do you want to link to?');
+        if (! href){
+            return editor.value?.chain().focus().run();
+        }
+        
+        return editor.value?.chain().focus().setLink({ href }).run();
+    };
 
 
 </script>
